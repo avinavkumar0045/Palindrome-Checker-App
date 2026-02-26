@@ -1,26 +1,32 @@
+import java.util.Scanner;
+
 public class PalindromeCheckerApp {
-    public static void main(String args[]) {
-        System.out.println("Jai Shree Ram, Welcome to Palindrome Checker Management app\n" +
-                "Version : 1.0" + "\nSystem initialized successfully\n");
+    public static void main(String[] args) {
+        System.out.println("Welcome to the Palindrome Checker Management system");
+        System.out.println("Version : 1.0");
+        System.out.println("System initialized successfully");
 
-        String str = "Water";
-        // To make it case-insensitive (optional but recommended), use:
-        // String temp = str.toLowerCase();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Text:");
+        String s1 = sc.nextLine();
 
-        int n = str.length();
-        boolean isPalindrome = true;
+        // 1. Create an empty string for the reverse
+        String reversed = "";
+        int length = s1.length();
 
-        for (int i = 0; i < n / 2; i++) {
-            if (str.charAt(i) != str.charAt(n - 1 - i)) {
-                isPalindrome = false;
-                break; // Stop checking once a mismatch is found
-            }
+        // 2. Loop backwards to build the reversed string
+        for (int i = length - 1; i >= 0; i--) {
+            reversed += s1.charAt(i);
         }
 
-        if (isPalindrome) {
-            System.out.println(str + " is a palindrome.");
-        } else {
-            System.out.println(str + " is NOT a palindrome.");
-        }
+        // 3. Compare original and reversed (ignoring case)
+        boolean pal = s1.equalsIgnoreCase(reversed);
+
+        // 4. Display the result
+        System.out.println("Original: " + s1);
+        System.out.println("Reversed: " + reversed);
+        System.out.println("Is it a palindrome? " + pal);
+
+        sc.close();
     }
 }
