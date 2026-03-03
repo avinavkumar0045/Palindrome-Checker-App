@@ -1,49 +1,74 @@
-import java.util.Scanner;
-import java.util.Deque;
-import java.util.ArrayDeque; // Efficient Deque implementation
-
 public class PalindromeCheckerApp {
-    public static void main(String[] args) {
-        System.out.println("Welcome to the Palindrome Checker Management system");
-        System.out.println("Version : 1.0");
-        System.out.println("System initialized successfully");
 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter Text:");
-        String s1 = sc.nextLine();
+    static class Node {
+        char data;
+        Node next;
 
-        // Normalize for comparison
-        String input = s1.toLowerCase();
-
-        // --- UC7: Deque-Based Optimized Palindrome Checker ---
-
-        // 1. Initialize Deque
-        // ArrayDeque is faster than LinkedList for stack/queue operations
-        Deque<Character> deque = new ArrayDeque<>();
-
-        // 2. Insert characters into Deque (Front to Rear)
-        for (int i = 0; i < input.length(); i++) {
-            deque.addLast(input.charAt(i));
+        Node(char data) {
+            this.data = data;
+            this.next = null;
         }
+    }
+        public static void main(String[] args) {
+            String input = "madam";
 
-        // 3. Compare until empty or only 1 character remains
-        boolean pal = true;
-        while (deque.size() > 1) {
-            // Remove from both ends
-            char first = deque.removeFirst();
-            char last = deque.removeLast();
+            Node head = null;
+            Node tail = null;
 
-            if (first != last) {
-                pal = false;
-                break;
+            for (int i = 0; i < input.length(); i++) {
+                Node newNode = new Node(input.charAt(i));
+                if (head == null) {
+                    head = newNode;
+                    tail = newNode;
+                } else {
+                    tail.next = newNode;
+                    tail = newNode;
+                }
+            }
+
+            if (isPalindrome(head)) {
+                System.out.println(input + " is a Palindrome.");
+            } else {
+                System.out.println(input + " is NOT a Palindrome.");
             }
         }
 
-        // 4. Display the result
-        System.out.println("\n--- UC7 Deque Analysis ---");
-        System.out.println("Input Text: " + s1);
-        System.out.println("Is it a palindrome? " + pal);
+        public static boolean isPalindrome(Node head) {
 
-        sc.close();
+            if (head == null || head.next == null) {
+                return true;
+            }
+
+            Node slow = head;
+            Node fast = head;
+
+            while (fast != null && fast.next != null) {
+                slow = slow.next;
+                fast = fast.next.next;
+            }
+
+            Node prev = null;
+            Node current = slow;
+            Node nextNode = null;
+
+            while (current != null) {
+                nextNode = current.next;
+                current.next = prev;
+                prev = current;
+                current = nextNode;
+            }
+
+            Node firstHalf = head;
+            Node secondHalf = prev;
+
+            while (secondHalf != null) {
+                if (firstHalf.data != secondHalf.data) {
+                    return false;
+                }
+                firstHalf = firstHalf.next;
+                secondHalf = secondHalf.next;
+            }
+
+            return true;
+        }
     }
-}
