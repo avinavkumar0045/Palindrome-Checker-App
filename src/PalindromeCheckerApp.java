@@ -1,74 +1,36 @@
+import java.util.Scanner;
+
 public class PalindromeCheckerApp {
 
-    static class Node {
-        char data;
-        Node next;
-
-        Node(char data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-        public static void main(String[] args) {
-            String input = "madam";
-
-            Node head = null;
-            Node tail = null;
-
-            for (int i = 0; i < input.length(); i++) {
-                Node newNode = new Node(input.charAt(i));
-                if (head == null) {
-                    head = newNode;
-                    tail = newNode;
-                } else {
-                    tail.next = newNode;
-                    tail = newNode;
-                }
-            }
-
-            if (isPalindrome(head)) {
-                System.out.println(input + " is a Palindrome.");
-            } else {
-                System.out.println(input + " is NOT a Palindrome.");
-            }
-        }
-
-        public static boolean isPalindrome(Node head) {
-
-            if (head == null || head.next == null) {
-                return true;
-            }
-
-            Node slow = head;
-            Node fast = head;
-
-            while (fast != null && fast.next != null) {
-                slow = slow.next;
-                fast = fast.next.next;
-            }
-
-            Node prev = null;
-            Node current = slow;
-            Node nextNode = null;
-
-            while (current != null) {
-                nextNode = current.next;
-                current.next = prev;
-                prev = current;
-                current = nextNode;
-            }
-
-            Node firstHalf = head;
-            Node secondHalf = prev;
-
-            while (secondHalf != null) {
-                if (firstHalf.data != secondHalf.data) {
-                    return false;
-                }
-                firstHalf = firstHalf.next;
-                secondHalf = secondHalf.next;
-            }
-
+    public static boolean isPalindrome(String str, int start, int end) {
+        if (start >= end) {
             return true;
         }
+
+        if (str.charAt(start) != str.charAt(end)) {
+            return false;
+        }
+
+        return isPalindrome(str, start + 1, end - 1);
     }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
+
+        input = input.replaceAll("\\s+", "").toLowerCase();
+
+        boolean result = isPalindrome(input, 0, input.length() - 1);
+
+        if (result) {
+            System.out.println("The given string is a Palindrome.");
+        } else {
+            System.out.println("The given string is NOT a Palindrome.");
+        }
+
+        scanner.close();
+    }
+}
